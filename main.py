@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Form, Request
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import joblib
 import numpy as np
@@ -8,6 +10,8 @@ model = joblib.load('model.pkl')
 
 app = FastAPI()
 
+app.mount('/static', StaticFiles(directory = 'static'), name = 'static')
+
 class IrisInput(BaseModel):
     SepalLengthCm: float
     SepalWidthCm: float
@@ -16,27 +20,26 @@ class IrisInput(BaseModel):
 
 species_mapping = {0: 'Iris Setosa', 1: 'Iris Versicolor', 2: 'Iris Virginica'}
 
-@app.get('/')
+@app.get('/', response_class= HTMLResponse)
 async def home():
-    """
-    Home Endpoint to Check if the Server is Running.
+    with open('static/index.html', 'r') as file:
+        return file.read()
 
-    """
-    return {'message': 'Welcome to Iris Species Predictor API!'}
+@app.get('/predict', response_class=HTMLResponse)
+async def predict():
+    with open('static/predict.html', 'r') as file:
+        return file.read()
 
 @app.post('/predict')
-async def predict_species(input_data: IrisInput):
-    """
-    Predict endpoint to classify the Iris species
-    Accepts JSON input and returns the predicted species
-    """
-    input_array = np.array([[
-        input_data.SepalLengthCm,
-        input_data.SepalWidthCm,
-        input_data.PetalLengthCm,
-        input_data.PetalWidthCm ]])
+async def predict_species(
+    SepalLengthCm: float = Form(...),
+    SepalWidthCm: float = Form(...),
+    PetalLengthCm: float = Form(...),
+    PetalWidthCm: float = Form(...)):
+    
+    
     feature_names = ['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm']
-    input_df = pd.DataFrame([input_data.dict()], columns = feature_names)
+    input_df = pd.DataFrame([[SepalLengthCm,SepalWidthCm,PetalLengthCm,PetalWidthCm]], columns = feature_names)
     prediction = model.predict(input_df)[0]
     species = species_mapping.get(prediction, 'Unknown')
     return {'prediction': species}
