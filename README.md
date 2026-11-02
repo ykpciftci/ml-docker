@@ -66,12 +66,13 @@ Missing or non-numeric fields return a `422` error.
 
 ## The model
 
-The model is trained in ([`train.py`](train.py)) on the classic Iris dataset ([`Iris.csv`](Iris.csv)), which has 150 flowers, 50 from each species.
+The model is trained in [`train.py`](train.py) on the classic Iris dataset [`Iris.csv`](Iris.csv), which has 150 flowers, 50 from each species.
 
-Algorithm: Preprocessing with StandardScaler(), SVM with an RBF kernel (`C=1.0`, `gamma='scale'`)
-Evaluation: 5-fold stratified cross-validation, repeated 10 times.
-Accuracy: 96.2% ± 3.3%, compared with a 33.3% baseline.
-Final model: trained on all 150 flowers.
+- **Algorithm:** `StandardScaler` followed by an SVM with an RBF kernel (`C=1.0`, `gamma='scale'`)
+- **Evaluation:** 5-fold stratified cross-validation, repeated 10 times
+- **Accuracy:** 96.2% ± 3.3%, compared with a 33.3% baseline
+- **Final model:** trained on all 150 flowers
+
 
 
 The Iris dataset is small and easy to classify, so this score shows that the pipeline works rather than how the model would perform on harder, real-world data.
