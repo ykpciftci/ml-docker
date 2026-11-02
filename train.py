@@ -21,13 +21,15 @@ def load_data():
 
 
 def build_model():
-     return make_pipeline(StandardScaler(), SVC(kernel = 'rbf', gamma = 'scale', C = 1.0))
+    return make_pipeline(StandardScaler(), SVC(kernel = 'rbf', gamma = 'scale', C = 1.0))
+
     
 def evaluate(name, model, X, y):
     cv = RepeatedStratifiedKFold(n_splits = 5, n_repeats = 10, random_state = 42)
     scores = cross_val_score(model, X, y, cv = cv)
     print(f'{name}: {scores.mean():.4f} +/- {scores.std():.4f}')
-  
+
+
 def main():
     X, y = load_data()
 
@@ -39,6 +41,7 @@ def main():
 
     joblib.dump(model, MODEL_PATH)
     print(f'Model saved to {MODEL_PATH}')
+
 
 if __name__ == '__main__':
     main()
