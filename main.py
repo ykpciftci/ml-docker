@@ -35,7 +35,6 @@ class IrisInput(BaseModel):
 class PredictionOutput(BaseModel):
     prediction: str
 
-species_mapping = {0: 'Iris Setosa', 1: 'Iris Versicolor', 2: 'Iris Virginica'}
 
 @app.get('/')
 def home():
@@ -55,8 +54,7 @@ def predict_species(flower: IrisInput):
     try:
         input_df = pd.DataFrame([flower.model_dump()])
         logger.info('Input data received: %s', input_df)
-        prediction = model.predict(input_df)[0]
-        species = species_mapping.get(prediction, 'Unknown')
+        species = model.predict(input_df)[0]
         logger.info('Prediction made: %s', species)
         return {'prediction': species}
     except Exception as e:

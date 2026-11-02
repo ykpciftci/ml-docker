@@ -3,8 +3,9 @@ import joblib
 import pandas as pd
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
+from sklearn.pipeline import make_pipeline
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_PATH = BASE_DIR / 'Iris.csv'
@@ -15,12 +16,12 @@ FEATURES = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']
 def load_data():
     data = pd.read_csv(DATA_PATH)
     X = data[FEATURES]
-    y = LabelEncoder().fit_transform(data['Species'])
+    y = data['Species'].str.replace('-', ' ').str.title()
     return X, y
 
 
 def train_model(X_train, y_train):
-    model =SVC(kernel = 'rbf', gamma = 0.1, C = 1.0)
+    model =make_pipeline(StandardScaler(), SVC(kernel = 'rbf', gamma = 'scale', C = 1.0))
     model.fit(X_train, y_train)
     return model
 

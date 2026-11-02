@@ -68,9 +68,9 @@ Missing or non-numeric fields return a `422` error.
 
 The model is trained in [`iris-classifier.ipynb`](iris-classifier.ipynb) on the classic Iris dataset ([`Iris.csv`](Iris.csv)), which has 150 flowers, 50 from each species.
 
-- **Algorithm:** SVM with an RBF kernel (`C=1.0`, `gamma=0.1`)
+- **Algorithm:** Preporecessing with StandardScaler(), SVM with an RBF kernel (`C=1.0`, `gamma='scale'`)
 - **Data split:** 60% training, 40% test, stratified by species
-- **Accuracy:** 96.67% on the 60 test flowers
+- **Accuracy:** 95.00% on the 60 test flowers
 
 The Iris dataset is small and easy to classify, so this score shows that the pipeline works rather than how the model would perform on harder, real-world data.
 
