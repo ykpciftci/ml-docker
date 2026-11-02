@@ -1,10 +1,7 @@
-fastapi
-joblib
-numpy
-pandas
-pydantic
-uvicorn
+fastapi==0.162.0
+joblib==1.6.0
+numpy==2.5.4
+pandas==3.1.0
+pydantic==2.14.2
 scikit-learn==1.9.0
-python-multipart
-httpx2
-pytest
+uvicorn==0.54.0
