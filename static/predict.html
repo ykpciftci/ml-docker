@@ -26,8 +26,16 @@
             });
 
             // Get the JSON response and update the result on the page
+            const predictionBox = document.getElementById("prediction");
+
+            if (!response.ok) {
+                predictionBox.innerText = "Could not predict. Each value must be above 0 and at most 15 cm.";
+                return;
+            }
+
             const result = await response.json();
-            document.getElementById("prediction").innerText = "Predicted Species: " + result.prediction;
+            predictionBox.innerText = 'Predicted Species: '+ result.prediction;
+
         }
     </script>
 </head>

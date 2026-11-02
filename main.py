@@ -55,10 +55,10 @@ async def predict():
 
 @app.post('/predict')
 async def predict_species(
-    SepalLengthCm: float = Form(...),
-    SepalWidthCm: float = Form(...),
-    PetalLengthCm: float = Form(...),
-    PetalWidthCm: float = Form(...)):
+    SepalLengthCm: float = Form(..., gt=0, le= 15, allow_inf_nan=False),
+    SepalWidthCm: float = Form(..., gt=0, le= 15, allow_inf_nan=False),
+    PetalLengthCm: float = Form(..., gt=0, le= 15, allow_inf_nan=False),
+    PetalWidthCm: float = Form(..., gt=0, le= 15, allow_inf_nan=False)):
     
     
     feature_names = ['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm']
