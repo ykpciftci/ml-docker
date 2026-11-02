@@ -1,3 +1,4 @@
+from pathlib import Path
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -8,6 +9,7 @@ import pandas as pd
 import uvicorn
 import logging
 
+BASE_DIR = Path(__file__).resolve().parent
 logging.basicConfig(
     level = logging.INFO,
     format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -15,7 +17,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger('FastAPI Iris Predictor')
 try:
-    model = joblib.load('model.pkl')
+    model = joblib.load(BASE_DIR / 'model.pkl')
     logger.info('Model loaded successfully.')
 except Exception as e:
     logger.error('Failed to load the model: %s', e)
@@ -23,7 +25,8 @@ except Exception as e:
 
 app = FastAPI()
 
-app.mount('/static', StaticFiles(directory = 'static'), name = 'static')
+app.mount('/static', StaticFiles(directory = BASE_DIR / 'static'), name = 'static')
+
 
 class IrisInput(BaseModel):
     SepalLengthCm: float
@@ -36,7 +39,7 @@ species_mapping = {0: 'Iris Setosa', 1: 'Iris Versicolor', 2: 'Iris Virginica'}
 @app.get('/', response_class= HTMLResponse)
 async def home():
     try:
-        with open('static/index.html', 'r') as file:
+        with open(BASE_DIR / 'static'/'index.html', 'r') as file:
             logger.info('Home page served.')
             return file.read()
     except Exception as e:
@@ -46,7 +49,7 @@ async def home():
 @app.get('/predict', response_class=HTMLResponse)
 async def predict():
     try:
-        with open('static/predict.html', 'r') as file:
+        with open(BASE_DIR /'static'/'predict.html', 'r') as file:
             logger.info('Prediction page served.')
             return file.read()
     except Exception as e:
