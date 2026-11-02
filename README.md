@@ -76,7 +76,7 @@ The Iris dataset is small and easy to classify, so this score shows that the pip
 
 ### Retraining
 
-The trained model is saved as `model.pkl`, so you don't need to retrain it to run the app. To retrain it, you also need the notebook's extra packages:
+The trained model is saved as `model.pkl`, so you don't need to retrain it to run the app. To retrain it, run train.py. If you want to open the notebook anyway, you need to install packages below:
 
 ```bash
 pip install notebook matplotlib seaborn
@@ -99,5 +99,6 @@ pip install notebook matplotlib seaborn
 │   └── styles.css          # Styles
 ├── requirements.txt        # Python dependencies
 ├── Dockerfile              # Container image definition
-└── .dockerignore           # Files left out of the image
+├── .dockerignore           # Files left out of the image
+└── train.py                # Model training
 ```
