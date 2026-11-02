@@ -66,17 +66,24 @@ Missing or non-numeric fields return a `422` error.
 
 ## The model
 
-The model is trained in [`iris-classifier.ipynb`](iris-classifier.ipynb) on the classic Iris dataset ([`Iris.csv`](Iris.csv)), which has 150 flowers, 50 from each species.
+The model is trained in ([`train.py`](train.py)) on the classic Iris dataset ([`Iris.csv`](Iris.csv)), which has 150 flowers, 50 from each species.
 
-- **Algorithm:** Preporecessing with StandardScaler(), SVM with an RBF kernel (`C=1.0`, `gamma='scale'`)
-- **Data split:** 60% training, 40% test, stratified by species
-- **Accuracy:** 95.00% on the 60 test flowers
+Algorithm: Preprocessing with StandardScaler(), SVM with an RBF kernel (`C=1.0`, `gamma='scale'`)
+Evaluation: 5-fold stratified cross-validation, repeated 10 times.
+Accuracy: 96.2% ± 3.3%, compared with a 33.3% baseline.
+Final model: trained on all 150 flowers.
+
 
 The Iris dataset is small and easy to classify, so this score shows that the pipeline works rather than how the model would perform on harder, real-world data.
 
 ### Retraining
 
-The trained model is saved as `model.pkl`, so you don't need to retrain it to run the app. To retrain it, run train.py. If you want to open the notebook anyway, you need to install packages below:
+The trained model is saved as `model.pkl`, so you don't need to retrain it to run the app. To retrain it:
+```bash
+python train.py
+```
+
+To open the notebook, you need to install packages below:
 
 ```bash
 pip install notebook matplotlib seaborn
@@ -91,7 +98,7 @@ pip install notebook matplotlib seaborn
 .
 ├── main.py                 # FastAPI app and prediction endpoint
 ├── model.pkl               # Trained SVM model
-├── iris-classifier.ipynb   # Data exploration and model training
+├── iris-classifier.ipynb   # Data exploration
 ├── Iris.csv                # Dataset
 ├── static/
 │   ├── index.html          # Home page

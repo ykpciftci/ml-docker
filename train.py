@@ -1,8 +1,8 @@
 from pathlib import Path
 import joblib
 import pandas as pd
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
+from sklearn.dummy import DummyClassifier
+from sklearn.model_selection import RepeatedStratifiedKFold, cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.pipeline import make_pipeline
@@ -20,25 +20,25 @@ def load_data():
     return X, y
 
 
-def train_model(X_train, y_train):
-    model =make_pipeline(StandardScaler(), SVC(kernel = 'rbf', gamma = 'scale', C = 1.0))
-    model.fit(X_train, y_train)
-    return model
-
-
+def build_model():
+     return make_pipeline(StandardScaler(), SVC(kernel = 'rbf', gamma = 'scale', C = 1.0))
+    
+def evaluate(name, model, X, y):
+    cv = RepeatedStratifiedKFold(n_splits = 5, n_repeats = 10, random_state = 42)
+    scores = cross_val_score(model, X, y, cv = cv)
+    print(f'{name}: {scores.mean():.4f} +/- {scores.std():.4f}')
+  
 def main():
     X, y = load_data()
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.4, random_state= 42, stratify= y)
 
-    model = train_model(X_train, y_train)
-    y_pred = model.predict(X_test)
+    evaluate('Baseline', DummyClassifier(strategy = 'most_frequent'), X, y)
+    evaluate('SVM', build_model(), X, y)
 
-    print(metrics.classification_report(y_test, y_pred))
-    print(f'Accuracy: {metrics.accuracy_score(y_test, y_pred):.4f}')
+    model = build_model()
+    model.fit(X, y)
 
     joblib.dump(model, MODEL_PATH)
     print(f'Model saved to {MODEL_PATH}')
-
 
 if __name__ == '__main__':
     main()
