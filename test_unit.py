@@ -1,7 +1,15 @@
 import pandas as pd
+import pytest
 from main import model
 
-def test_model_prediction():
-    input_df = pd.DataFrame([[5.1, 3.5, 1.4, 0.2]], columns = ['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm'])
-    species = model.predict(input_df)[0]
-    assert species == 'Iris Setosa', 'The Prediction did not return the expected result.'
+FEATURES = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']
+
+
+@pytest.mark.parametrize('measurements, expected', [
+    ([5.1, 3.5, 1.4, 0.2], 'Iris Setosa'),
+    ([5.9, 3.0, 4.2, 1.5], 'Iris Versicolor'),
+    ([6.5, 3.0, 5.5, 2.0], 'Iris Virginica'),
+])
+def test_model_predicts_species(measurements, expected):
+    input_df = pd.DataFrame([measurements], columns = FEATURES)
+    assert model.predict(input_df)[0] == expected
