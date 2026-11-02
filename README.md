@@ -46,6 +46,7 @@ Then open <http://localhost:8000>. On Windows, activate the environment with `my
 | `GET` | `/predict` | Page with the prediction form |
 | `POST` | `/predict` | Returns a prediction as JSON |
 | `GET` | `/docs` | Interactive API documentation |
+| `GET` | `/health` | Health check |
 
 `POST /predict` takes a JSON body. All four fields are required and are measured in centimeters:
 

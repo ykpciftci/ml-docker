@@ -21,3 +21,7 @@ def test_predict_species_endpoint():
     response = client.post('/predict', json = payload)
     assert response.status_code == 200, 'Failed to predict Species.'
     assert 'prediction' in response.json(), 'Response missing prediction field.'
+def test_health_endpoint():
+    response = client.get('health')
+    assert response.status_code == 200, 'Failed to check health'
+    assert response.json() == {'status': 'ok'} , 'Response missing JSON body'

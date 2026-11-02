@@ -44,8 +44,11 @@ def home():
 
 @app.get('/predict')
 def predict():
-    return FileResponse(BASE_DIR /'static'/'predict.html')
+    return FileResponse(BASE_DIR / 'static' / 'predict.html')
             
+@app.get('/health')
+def health():
+    return {'status': 'ok'}
 
 @app.post('/predict', response_model=PredictionOutput)
 def predict_species(flower: IrisInput):
