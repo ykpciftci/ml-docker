@@ -47,14 +47,12 @@ Then open <http://localhost:8000>. On Windows, activate the environment with `my
 | `POST` | `/predict` | Returns a prediction as JSON |
 | `GET` | `/docs` | Interactive API documentation |
 
-`POST /predict` takes form data, not a JSON body. All four fields are required and are measured in centimeters:
+`POST /predict` takes a JSON body. All four fields are required and are measured in centimeters:
 
 ```bash
 curl -X POST http://localhost:8000/predict \
-  -d SepalLengthCm=5.1 \
-  -d SepalWidthCm=3.5 \
-  -d PetalLengthCm=1.4 \
-  -d PetalWidthCm=0.2
+  -H "Content-Type: application/json" \
+  -d '{"SepalLengthCm": 5.1, "SepalWidthCm": 3.5, "PetalLengthCm": 1.4, "PetalWidthCm": 0.2}'
 ```
 
 Response:

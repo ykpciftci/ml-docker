@@ -14,16 +14,12 @@
             const formData = new FormData(event.target);
 
             // Prepare the data to send to the FastAPI endpoint
-            const data = new URLSearchParams();
-            for (const [key, value] of formData.entries()) {
-                data.append(key, value);
-            }
-
-            // Send the data to FastAPI via POST request
             const response = await fetch("/predict", {
                 method: "POST",
-                body: data
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(Object.fromEntries(formData))
             });
+
 
             // Get the JSON response and update the result on the page
             const predictionBox = document.getElementById("prediction");

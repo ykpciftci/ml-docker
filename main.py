@@ -1,8 +1,8 @@
 from pathlib import Path
-from fastapi import FastAPI, Form
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import joblib
 import pandas as pd
 import logging
@@ -19,7 +19,7 @@ try:
     logger.info('Model loaded successfully.')
 except Exception as e:
     logger.error('Failed to load the model: %s', e)
-    raise RuntimeError('Failed to load the Model') from e
+    raise RuntimeError('Failed to load the model') from e
 
 app = FastAPI()
 
@@ -27,10 +27,13 @@ app.mount('/static', StaticFiles(directory = BASE_DIR / 'static'), name = 'stati
 
 
 class IrisInput(BaseModel):
-    SepalLengthCm: float
-    SepalWidthCm: float
-    PetalLengthCm: float
-    PetalWidthCm: float
+    SepalLengthCm: float = Field(gt=0, le=15, allow_inf_nan=False)
+    SepalWidthCm: float = Field(gt=0, le=15, allow_inf_nan=False)
+    PetalLengthCm: float = Field(gt=0, le=15, allow_inf_nan=False)
+    PetalWidthCm: float = Field(gt=0, le=15, allow_inf_nan=False)
+
+class PredictionOutput(BaseModel):
+    prediction: str
 
 species_mapping = {0: 'Iris Setosa', 1: 'Iris Versicolor', 2: 'Iris Virginica'}
 
@@ -54,17 +57,10 @@ async def predict():
         logger.error('Error serving prediction page: %s', e)
         return HTMLResponse(content = 'Error loading prediction page.', status_code= 500)
 
-@app.post('/predict')
-async def predict_species(
-    SepalLengthCm: float = Form(..., gt=0, le= 15, allow_inf_nan=False),
-    SepalWidthCm: float = Form(..., gt=0, le= 15, allow_inf_nan=False),
-    PetalLengthCm: float = Form(..., gt=0, le= 15, allow_inf_nan=False),
-    PetalWidthCm: float = Form(..., gt=0, le= 15, allow_inf_nan=False)):
-    
-    
-    feature_names = ['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm']
+@app.post('/predict', response_model=PredictionOutput)
+async def predict_species(flower: IrisInput):
     try:
-        input_df = pd.DataFrame([[SepalLengthCm,SepalWidthCm,PetalLengthCm,PetalWidthCm]], columns = feature_names)
+        input_df = pd.DataFrame([flower.model_dump()])
         logger.info('Input data received: %s', input_df)
         prediction = model.predict(input_df)[0]
         species = species_mapping.get(prediction, 'Unknown')

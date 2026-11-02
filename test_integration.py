@@ -18,6 +18,6 @@ def test_predict_species_endpoint():
         'PetalLengthCm': 1.4,
         'PetalWidthCm': 0.2
     }
-    response = client.post('/predict', data = payload)
+    response = client.post('/predict', json = payload)
     assert response.status_code == 200, 'Failed to predict Species.'
     assert 'prediction' in response.json(), 'Response missing prediction field.'
