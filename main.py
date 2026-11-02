@@ -1,6 +1,6 @@
 from pathlib import Path
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 import joblib
@@ -37,28 +37,18 @@ class PredictionOutput(BaseModel):
 
 species_mapping = {0: 'Iris Setosa', 1: 'Iris Versicolor', 2: 'Iris Virginica'}
 
-@app.get('/', response_class= HTMLResponse)
-async def home():
-    try:
-        with open(BASE_DIR / 'static'/'index.html', 'r') as file:
-            logger.info('Home page served.')
-            return file.read()
-    except Exception as e:
-        logger.error('Error serving home page: %s', e)
-        return HTMLResponse(content = 'Error loading the home page.', status_code= 500)
+@app.get('/')
+def home():
+    return FileResponse(BASE_DIR / 'static' / 'index.html')
 
-@app.get('/predict', response_class=HTMLResponse)
-async def predict():
-    try:
-        with open(BASE_DIR /'static'/'predict.html', 'r') as file:
-            logger.info('Prediction page served.')
-            return file.read()
-    except Exception as e:
-        logger.error('Error serving prediction page: %s', e)
-        return HTMLResponse(content = 'Error loading prediction page.', status_code= 500)
+
+@app.get('/predict')
+def predict():
+    return FileResponse(BASE_DIR /'static'/'predict.html')
+            
 
 @app.post('/predict', response_model=PredictionOutput)
-async def predict_species(flower: IrisInput):
+def predict_species(flower: IrisInput):
     try:
         input_df = pd.DataFrame([flower.model_dump()])
         logger.info('Input data received: %s', input_df)
