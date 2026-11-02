@@ -1,12 +1,10 @@
 from pathlib import Path
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import joblib
-import numpy as np
 import pandas as pd
-import uvicorn
 import logging
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -21,7 +19,7 @@ try:
     logger.info('Model loaded successfully.')
 except Exception as e:
     logger.error('Failed to load the model: %s', e)
-    raise RuntimeError('Model loaded failed') from e
+    raise RuntimeError('Failed to load the Model') from e
 
 app = FastAPI()
 
@@ -67,11 +65,11 @@ async def predict_species(
     feature_names = ['SepalLengthCm','SepalWidthCm','PetalLengthCm','PetalWidthCm']
     try:
         input_df = pd.DataFrame([[SepalLengthCm,SepalWidthCm,PetalLengthCm,PetalWidthCm]], columns = feature_names)
-        logger.info('Input data recieved: %s', input_df)
+        logger.info('Input data received: %s', input_df)
         prediction = model.predict(input_df)[0]
         species = species_mapping.get(prediction, 'Unknown')
         logger.info('Prediction made: %s', species)
         return {'prediction': species}
     except Exception as e:
         logger.error('Error making prediction: %s', e)
-        return JSONResponse(content = {'error': 'Failed to make a Prediction'}, status_code= 500)
+        return JSONResponse(content = {'error': 'Failed to make a prediction'}, status_code= 500)

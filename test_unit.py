@@ -1,4 +1,3 @@
-import pytest
 import pandas as pd
 from main import model, species_mapping
 
