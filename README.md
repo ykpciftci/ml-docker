@@ -2,10 +2,11 @@
 
 ![Tests](https://github.com/ykpciftci/ml-docker/actions/workflows/tests.yml/badge.svg)
 
-
 A small machine learning web app that predicts the species of an iris flower from four measurements. A support vector machine (SVM) model built with scikit-learn is served through a FastAPI app with a simple web page, and the whole app is packaged with Docker.
 
 The app classifies flowers as **Iris Setosa**, **Iris Versicolor**, or **Iris Virginica**.
+
+![Prediction page](docs/screenshot.png)
 
 ## Tech stack
 
@@ -43,6 +44,15 @@ uvicorn main:app --reload
 
 Then open <http://localhost:8000>. On Windows, activate the environment with `myenv\Scripts\activate` instead.
 
+## Running the tests
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest -q
+```
+
+The tests cover the model's predictions for each species, input validation, the API endpoints and the training code. They also run automatically on every push through GitHub Actions.
+
 ## Using the app
 
 | Method | Path | Description |
@@ -67,7 +77,7 @@ Response:
 {"prediction": "Iris Setosa"}
 ```
 
-Missing or non-numeric fields return a `422` error.
+Missing or non-numeric fields and values that aren't above 0 and at most 15 return a `422` error.
 
 ## The model
 
@@ -78,23 +88,21 @@ The model is trained in [`train.py`](train.py) on the classic Iris dataset [`Iri
 - **Accuracy:** 96.2% ± 3.3%, compared with a 33.3% baseline
 - **Final model:** trained on all 150 flowers
 
-
-
 The Iris dataset is small and easy to classify, so this score shows that the pipeline works rather than how the model would perform on harder, real-world data.
 
 ### Retraining
 
 The trained model is saved as `model.pkl`, so you don't need to retrain it to run the app. To retrain it:
+
 ```bash
 python train.py
 ```
 
-To open the notebook, you need to install packages below:
+To open the notebook, you need these packages:
 
 ```bash
 pip install notebook matplotlib seaborn
 ```
-
 
 `requirements.txt` pins `scikit-learn==1.9.0`, the version that saved the current model. If you retrain with a different version, update the pin to match.
 
@@ -103,16 +111,22 @@ pip install notebook matplotlib seaborn
 ```
 .
 ├── main.py                 # FastAPI app and prediction endpoint
-├── model.pkl               # Trained SVM model
-├── iris-classifier.ipynb   # Data exploration
+├── train.py                # Model training
+├── model.pkl               # Trained pipeline (scaler and SVM)
 ├── Iris.csv                # Dataset
+├── iris-classifier.ipynb   # Data exploration
 ├── static/
 │   ├── index.html          # Home page
 │   ├── predict.html        # Prediction form
 │   └── styles.css          # Styles
+├── test_unit.py            # Unit tests for individual components
+├── test_integration.py     # Integration tests for combined systems
+├── test_train.py           # Test for the ML model training pipeline
 ├── requirements.txt        # Python dependencies
+├── requirements-dev.txt    # Test dependencies
 ├── Dockerfile              # Container image definition
 ├── .dockerignore           # Files left out of the image
-├── train.py                # Model training
-└── requirements-dev.txt    # Test dependencies
+└── .github/workflows/
+    └── tests.yml           # GitHub Actions workflow for automated testing
+
 ```
