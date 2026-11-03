@@ -1,5 +1,8 @@
 # Iris Species Predictor
 
+![Tests](https://github.com/ykpciftci/ml-docker/actions/workflows/tests.yml/badge.svg)
+
+
 A small machine learning web app that predicts the species of an iris flower from four measurements. A support vector machine (SVM) model built with scikit-learn is served through a FastAPI app with a simple web page, and the whole app is packaged with Docker.
 
 The app classifies flowers as **Iris Setosa**, **Iris Versicolor**, or **Iris Virginica**.
@@ -23,7 +26,7 @@ docker run --rm -p 8000:8000 iris-app
 
 Then open <http://localhost:8000>. Press `Ctrl + C` in the terminal to stop the app. If it keeps running, use `docker ps` to find the container ID and `docker stop <container_id>` to stop it.
 
-The container runs as a non-root user and reports its health through `/health`
+The container runs as a non-root user and reports its health through `/health`.
 
 ## Run without Docker
 
