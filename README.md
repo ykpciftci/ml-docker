@@ -6,7 +6,7 @@ A small machine learning web app that predicts the species of an iris flower fro
 
 The app classifies flowers as **Iris Setosa**, **Iris Versicolor**, or **Iris Virginica**.
 
-![Prediction page](docs/screenshot.png)
+![Prediction page](docs/screenshot.jpg)
 
 ## Tech stack
 
@@ -120,19 +120,19 @@ pip install notebook matplotlib seaborn
 │   ├── index.html          # Home page
 │   ├── predict.html        # Prediction form
 │   └── styles.css          # Styles
-│── tests/
-│   ├── test_unit.py        # Model predict each species
-│   ├── test_integration.py # API endpoints and input validation
-│   ├── test_train.py       # Data loading and training
+├── tests/
+│   ├── test_model.py       # Model predicts each species
+│   ├── test_api.py         # API endpoints and input validation
+│   └── test_train.py       # Data loading and training
 ├── requirements.txt        # Python dependencies
 ├── requirements-dev.txt    # Test dependencies
 ├── Dockerfile              # Container image definition
 ├── .dockerignore           # Files left out of the image
-├── .gitignore              # List of files fot Git to ignore
+├── .gitignore              # List of files for Git to ignore
 ├── pytest.ini              # Configuration file for pytest testing options
-├── LICENSE                 # MIT license 
+├── LICENSE                 # MIT license
 ├── docs/
-│   └── screanshot.jpg      # Screenshot of working prediction page.
+│   └── screenshot.jpg      # Screenshot of working prediction page
 └── .github/workflows/
     └── tests.yml           # GitHub Actions workflow for automated testing
 ```
