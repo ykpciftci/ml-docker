@@ -23,7 +23,7 @@ docker run --rm -p 8000:8000 iris-app
 
 Then open <http://localhost:8000>. Press `Ctrl + C` in the terminal to stop the app. If it keeps running, use `docker ps` to find the container ID and `docker stop <container_id>` to stop it.
 
-The container runs as a non-root user and reports its health through /health.
+The container runs as a non-root user and reports its health through `/health`
 
 ## Run without Docker
 
