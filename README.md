@@ -13,6 +13,7 @@ The app classifies flowers as **Iris Setosa**, **Iris Versicolor**, or **Iris Vi
 - **Model:** scikit-learn, pandas, NumPy, joblib
 - **API and web app:** FastAPI, Uvicorn, HTML, CSS
 - **Packaging:** Docker (Python 3.14 slim image)
+- **Testing and CI:** pytest, GitHub Actions
 
 ## Quick start with Docker
 
@@ -119,14 +120,19 @@ pip install notebook matplotlib seaborn
 │   ├── index.html          # Home page
 │   ├── predict.html        # Prediction form
 │   └── styles.css          # Styles
-├── test_unit.py            # Unit tests for individual components
-├── test_integration.py     # Integration tests for combined systems
-├── test_train.py           # Test for the ML model training pipeline
+│── tests/
+│   ├── test_unit.py        # Model predict each species
+│   ├── test_integration.py # API endpoints and input validation
+│   ├── test_train.py       # Data loading and training
 ├── requirements.txt        # Python dependencies
 ├── requirements-dev.txt    # Test dependencies
 ├── Dockerfile              # Container image definition
 ├── .dockerignore           # Files left out of the image
+├── .gitignore              # List of files fot Git to ignore
+├── pytest.ini              # Configuration file for pytest testing options
+├── LICENSE                 # MIT license 
+├── docs/
+│   └── screanshot.jpg      # Screenshot of working prediction page.
 └── .github/workflows/
     └── tests.yml           # GitHub Actions workflow for automated testing
-
 ```
